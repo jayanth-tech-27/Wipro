@@ -1,0 +1,60 @@
+package Pages;
+
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import BaseClass.BaseClass;
+ 
+public class SignUppage extends BaseClass{
+	String first_name,last_name,email,password,confirm_password,url,browser;
+@BeforeTest
+	public void readData() throws IOException
+	{
+		FileInputStream fis = new FileInputStream("C:\\Users\\JAYANTH\\eclipse-workspace\\CapStone_Project\\src\\test\\java\\Data\\Signup.properties");
+		Properties prop = new Properties();
+		prop.load(fis);
+		 first_name = prop.getProperty("first_name");
+		 last_name = prop.getProperty("last_name");
+		email = prop.getProperty("email");
+		password=prop.getProperty("password");
+		confirm_password=prop.getProperty("confirm_password");
+		url = prop.getProperty("url");
+		browser = prop.getProperty("browser");
+	}
+	@Test
+	public void Singup()
+	{
+		System.out.println(first_name);
+		System.out.println(last_name);
+		System.out.println(email);
+		System.out.println(password);
+		System.out.println(confirm_password);
+		System.out.println(url);
+		System.out.println(browser);
+	}
+
+@Test (enabled=true)
+	public void login() throws IOException, InterruptedException
+	{
+		
+		invokeBrowser(browser);
+		driver.get(url);
+//		driver.manage().window().maximize();
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("/html/body/div[2]/header/div[1]/div/ul/li[3]/a")).click();
+		driver.findElement(By.xpath("//input[@class='input-text required-entry']")).sendKeys(first_name);
+		driver.findElement(By.id("lastname")).sendKeys(last_name);
+		driver.findElement(By.id("email_address")).sendKeys(email);
+		driver.findElement(By.id("password")).sendKeys(password);
+		driver.findElement(By.id("password-confirmation")).sendKeys(confirm_password);
+		driver.findElement(By.xpath("//button[@class='action submit primary']")).click();
+}
+}
