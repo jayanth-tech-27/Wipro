@@ -1,0 +1,78 @@
+package Utils;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Test;
+import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+
+import BaseClass.BaseClass;
+import Pages.LoginPage;
+
+public class LoginExcel extends BaseClass {
+	FileInputStream fis;
+	Properties prop;
+	LoginPage login_page;
+	WebDriver driver;
+	
+	
+	public LoginExcel(WebDriver driver) {
+		this.driver=driver;
+	}
+		@BeforeTest
+		public void openBrowser()
+		{		
+			invokeBrowser("chrome");
+//			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+	}
+		@Test
+		public void ReadDataExcel() throws IOException, InterruptedException{
+		
+			FileInputStream excel=new FileInputStream("C:\\Users\\JAYANTH\\eclipse-workspace\\Cap_Stone\\src\\test\\resources\\Excel\\Luma_Project.xlsx");
+			
+			XSSFWorkbook workbook = new XSSFWorkbook();
+			
+			XSSFSheet sheet_name = workbook.getSheet("SignupPage");
+			int rows=sheet_name.getPhysicalNumberOfRows();
+			
+			//identify the no of records having the data
+			System.out.println("Total no of records/rows in Selenium sheet is: "+rows);
+			
+			//Logic to find the no of columns
+			int columns = sheet_name.getRow(1).getPhysicalNumberOfCells();
+			System.out.println("Total no of columns in Selenium sheet is: "+columns);
+			
+			login_page = new LoginPage(driver);
+			String first_name = sheet_name.getRow(1).getCell(0).getStringCellValue();
+			login_page.first_name().sendKeys(first_name);
+			String last_name = sheet_name.getRow(1).getCell(1).getStringCellValue();
+			login_page.last_name().sendKeys(last_name);
+			String password = sheet_name.getRow(1).getCell(2).getStringCellValue();
+			login_page.password().sendKeys(password);
+			String confirm_password = sheet_name.getRow(1).getCell(3).getStringCellValue();
+			login_page.comfirm_password().sendKeys(confirm_password);
+			String email = sheet_name.getRow(1).getCell(4).getStringCellValue();
+			login_page.email().sendKeys(email);		}		
+		@AfterTest
+		public void close() throws InterruptedException
+			{
+				Thread.sleep(2000);
+//				driver.quit();
+			}
+		 
+
+		
+//		rlp.userName().sendKeys(username);
+//		Thread.sleep(2000);
+//		rlp.password().sendKeys(password);
+
+			
+		
+
+}
